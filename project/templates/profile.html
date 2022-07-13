@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if not current_user.uprawnienia == 'K' %}
+<h1 class="title">
+  Osz Ty Łobuzie hakerze jeden policja już jedzie będziesz siedzieć!
+  <br>
+  <br>
+  ...a i jeszcze ZWALNIAM CIĘ!
+</h1>
+{% else %}
+<h1 class="title">
+  Witaj, {{ name }}!
+</h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div style="width:50%;float:left;">
+  <h1 class="title">
+    Twoje dane<br><br>
+    <div style="width:30%;float:left;text-align: left;">
+    <p>Imię: </p>
+    <p>Nazwisko:</p>
+    <p>Pesel:</p>
+    <p>Telefon:</p>
+  </div>
+  <div style="width:70%;float:left; text-align: left;">
+    <p>{{ name }} </p>
+    <p>{{ nazwisko }} </p>
+    <p>{{ pesel }} </p>
+    <p>{{ telefon }} </p>
+  </div>
+  </h1>
+  <form method="POST" action="/del_user">
+    <button class="button is-block is-info is-large is-fullwidth">Usun Konto</button>
+    <input type="hidden" name="id_uzytk" value={{ current_user.id_uzytk }}>
+    </form>
+  </div>
+  <h1 class="title">
+    Zmień swoje dane
+  </h1>
+  <div class = "box" style="width:50%;float:left;">
+  <form method="POST" action="/data_post">
+  
+  <div class="field" style="width:100%;">
+        <div class="control">
+            <input class="input is-large" type="text" name="change_name" placeholder="Imię" autofocus="" required>
+        </div>
+    </div>
+  
+    <div class="field" style="width:100%;">
+        <div class="control">
+            <input class="input is-large" type="text" name="change_nazwisko" placeholder="Nazwisko" required>
+        </div>
+    </div>
+  
+    <div class="field" style="width:100%;">
+        <div class="control">
+            <input class="input is-large" type="text" name="change_pesel" placeholder="Pesel" required>
+        </div>
+    </div>
+  
+    <div class="field" style="width:100%;">
+        <div class="control">
+            <input class="input is-large" type="tel" name="change_telefon" placeholder="Telefon" required>
+        </div>
+    </div>
+  
+    <div class="field" style="width:100%;">
+      <div class="control">
+          <input class="input is-large" type="password" name="new_password" placeholder="Nowe Hasło" required>
+      </div>
+  </div>
+  
+  <div class="field" style="width:100%;">
+    <div class="control">
+        <input class="input is-large" type="password" name="old_password" placeholder="Stare Hasło" required>
+    </div>
+  </div>
+  
+    <button class="button is-block is-info is-large is-fullwidth" style="width:100%;">Potwierdź</button>
+    <br><br>
+  </form>
+  </div>
+  <h1 class="title">
+    Twoje Konto
+  </h1>
+  <br><br><br>
+  <h1 class="title">
+    <p>Portfele</p><br>
+  </h1>
+  <h2 class="subtitle">
+
+    <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Nazwa</p><br>
+    </div>
+    <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Stan Konta</p><br>
+    </div>
+    <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Konto do rozliczeń</p><br>
+    </div>
+    <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Akcja</p><br>
+    </div>
+
+    {% for portfel in portfele %}
+    <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ portfel.nazwa }}</p><br>
+    </div>
+    <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ portfel.stan_konta }}</p><br>
+    </div>
+    <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ portfel.dane_do_rozliczen }}</p><br>
+    </div>
+    <form method="POST" action="/del_vallet">
+      <button class="button is-block is-info is-large is-fullwidth" style="width:20%; float:left;">Usun</button>
+      <input type="hidden" name="id_portfela" value={{ portfel.id_portfela }}>
+      </form>
+    {% endfor %} 
+  </h2>
+  <div style="width:48%; float:left; margin: 1%;">
+    <h1 class="title">Dodaj nowy portfel</h1>
+    <div class="box">
+  <form method="POST" action="/add_account_post">
+    <div class="field" style="width:90%;">
+          <div class="control">
+            <input class="input is-large" type="text" name="vallet" placeholder="Nazwa" autofocus="" required>
+          </div>
+          <div class="control">
+            <input class="input is-large" type="text" name="account_number" placeholder="Numer konta bankowego" autofocus="" required>
+          </div>
+        </div>
+      <button class="button is-block is-info is-large is-fullwidth" style="width:90%;">Dodaj</button>
+    </form>
+  </div>
+  </div>
+  <div style="width:50%; float:left;">
+    <h1 class="title">Kup/Sprzedaj LarryCoin</h1>
+    <div class = "box">
+    <form method="POST" action="/doladuj">
+      <div class="field" style="width:90%;">
+            <div class="control">
+              <label for="vallets"></label>
+              <select class="input" name="vallets" size="1">
+                {% for portfel in portfele %}
+                <option value={{ portfel.id_portfela }}>{{ portfel.nazwa }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="oferta"></label>
+              <select class="input" name="oferta" size="1">
+                {% for oferta in oferty %}
+                <option value={{ oferta.id_oferty }}>{{ oferta.nazwa }} ({{ oferta.liczba_monet }}lc za {{ oferta.cena }}zł)</option>
+                {% endfor %}
+              </select>
+            </div>
+            
+            <div class="control">
+              <input class="input is-large" type="number" name="ile" placeholder="Ile transakcji?" autofocus="" min=1 value=1 required>
+            </div>
+          </div>
+        <button class="button is-block is-info is-large is-fullwidth" style="width:90%;">Kup/Sprzedaj</button>
+      </form>
+    </div>
+    <br><br>
+    </div>
+  <h1 class="title">
+    <p>Aktualne Zakłady</p><br>
+  </h1>
+  <h2 class="subtitle">
+
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Gospodarz</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Gość</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Typ</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Kurs</p><br>
+    </div>
+    <div style="width:16.50%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Stawka</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Data meczu</p><br>
+    </div>
+    {% for zaklad in zaklady %}
+    {% if zaklad.status == "N" %}
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ zaklad.gospodarz }}</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ zaklad.gosc }}</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      {% if zaklad.typ == 0 %}
+      <p>Remis</p>
+      {% elif zaklad.typ == 1 %}
+      <p>Gospodarz</p>
+      {% else %}
+      <p>Gosc</p>
+      {% endif %}
+      <br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      {% if zaklad.typ == 0 %}
+      <p>{{ zaklad.kurs_remis }}</p>
+      {% elif zaklad.typ == 1 %}
+      <p>{{zaklad.kurs_gospodarz}}</p>
+      {% else %}
+      <p>{{zaklad.kurs_gosc}}</p>
+      {% endif %}
+      <br>
+    </div>
+    <div style="width:16.50%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ zaklad.monety_postawione }}</p><br>
+    </div>
+    <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+      <p>{{ zaklad.data_meczu }}</p><br>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <br><br></h2>
+    <br><br><br>
+
+
+    <h1 class="title">
+      <p>Historia zakładów</p><br>
+    </h1>
+    <h2 class="subtitle">
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p style="border-bottom: 2px solid black;">Gospodarz</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p style="border-bottom: 2px solid black;">Gość</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p style="border-bottom: 2px solid black;">Zwycięzca</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p style="border-bottom: 2px solid black;">Typ</p><br>
+      </div>
+      <div style="width:16.50%;float:left; text-align: center;border-right: 3px solid black;">
+        <p style="border-bottom: 2px solid black;">Wygrana</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p style="border-bottom: 2px solid black;">Data meczu</p><br>
+      </div>
+      {% for zaklad in zaklady %}
+      {% if zaklad.status == "R" %}
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p>{{zaklad.gospodarz}}</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        <p>{{zaklad.gosc}}</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+       {%if zaklad.zwyciezca == 1%}
+        <p>{{ zaklad.gospodarz }}</p>
+        {%elif zaklad.zwyciezca == 2%}
+        <p>{{ zaklad.gosc }}</p>
+        {%else%}
+        <p>Remis</p>
+        {%endif%}
+        <br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+        {% if zaklad.typ == 0 %}
+      <p>Remis</p>
+      {% elif zaklad.typ == 1 %}
+      <p>Gospodarz</p>
+      {% else %}
+      <p>Gosc</p>
+      {% endif %}
+      <br>
+      </div>
+      <div style="width:16.50%;float:left; text-align: center;border-right: 3px solid black;">
+        <p>{{zaklad.wygrana}}</p><br>
+      </div>
+      <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+
+        <p>{{zaklad.data_meczu}}</p><br>
+      </div>
+      {% endif %}
+      {% endfor %}
+      <br><br></h2>
+      {% endif %}
+{% endblock %}

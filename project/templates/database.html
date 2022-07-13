@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if not current_user.uprawnienia == 'A' %}
+<h1 class="title">
+  "By Admina uprawnienia mieć stać Adminem musisz się."
+  <br>~Yoda Mistrz
+</h1>
+{% else %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="notification is-danger">
+  {{ messages[0] }}
+</div>
+{% endif %}
+{% endwith %}
+<h1 class="title" style="border-bottom: 3px solid black;">
+  {{ choice }}
+</h1>
+
+{% if choice == 'Pracownicy' %}
+<br>
+<div class="column is-4 is-offset-4">
+  <h3 class="title">Dodaj pracownika</h3>
+  <div class="box">
+<form method="POST" action="/add_worker">
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="email" name="email" placeholder="Email" autofocus="" required>
+      </div>
+  </div>
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="password" name="password" placeholder="Hasło" required>
+      </div>
+  </div>
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="text" name="name" placeholder="Imię" autofocus="" required>
+      </div>
+  </div>
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="text" name="nazwisko" placeholder="Nazwisko" required>
+      </div>
+  </div>
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="text" name="pesel" placeholder="Pesel" required>
+      </div>
+  </div>
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="tel" name="telefon" placeholder="Telefon" required>
+      </div>
+  </div>
+  <button class="button is-block is-info is-large is-fullwidth">Dodaj</button>
+  <input type="hidden" name="akcja" value="pracownik_add">
+</form>
+</div>
+</div>
+<br><br>
+<h1 class="title">
+  <p>Zatrudnieni pracownicy</p><br>
+</h1>
+<h2 class="subtitle">
+
+  <div style="width:10%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">ID pracownika</p><br>
+  </div>
+  <div style="width:23%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">email</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">PESEL</p><br>
+  </div>
+  <div style="width:16.50%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Imię</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Nazwisko</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Telefon</p><br>
+  </div>
+
+  {% for pracownik in pracownicy %}
+  <div style="width:10%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.id_uzytk }}</p><br>
+  </div>
+  <div style="width:23%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.email }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.pesel }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.imie }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.nazwisko }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.telefon }}</p><br>
+  </div>
+  <form action="del_user" method="POST" style="width:30%; margin:auto; margin-bottom: 100px;">
+  <button class="button is-block is-info is-large is-fullwidth">Usun Pracownika</button>
+  <input type="hidden" name="id_uzytk" value={{pracownik.id_uzytk}}>
+</form>
+  {% endfor %}
+  </h2>
+{% endif %}
+
+
+{% if choice == 'Klienci' %}
+<br>
+<h2 class="subtitle">
+  <div style="width:10%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">ID klienta</p><br>
+  </div>
+  <div style="width:23%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">email</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">PESEL</p><br>
+  </div>
+  <div style="width:16.50%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Imię</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Nazwisko</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Telefon</p><br>
+  </div>
+
+  {% for pracownik in klienci %}
+  <div style="width:10%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.id_uzytk }}</p><br>
+  </div>
+  <div style="width:23%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.email }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.pesel }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.imie }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.nazwisko }}</p><br>
+  </div>
+  <div style="width:16.5%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ pracownik.telefon }}</p><br>
+  </div>
+  {% endfor %}
+  </h2>
+{% endif %}
+
+
+{% if choice == 'Transakcje' %}
+<br>
+{% for transakcja in transakcje %}
+<div style="margin-bottom:300px; margin-top:100px;">
+<h1 class="title" >
+  Faktura numer {{transakcja.id_transakcji}} 
+</h1>
+<h2 class="subtitle">
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Data</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Stan konta przed</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Stan konta po</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Typ oferty</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Kwota (zł)</p><br>
+  </div>
+  
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">{{transakcja.data_transakcji}}</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">{{transakcja.stan_konta_przed}}</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">{{transakcja.stan_konta_po}}</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">
+      {%if transakcja.nazwa%}
+      {{transakcja.nazwa}}
+      {%else%}
+      --Oferta usunięta--
+      {%endif%}
+    </p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">{{transakcja.kwota}}</p><br>
+  </div>
+  </h2>
+
+  <h1 class="title" >
+    {%if transakcja.imie%}
+    {{transakcja.imie}} {{transakcja.nazwisko}} 
+  </h1>
+  <h2 class="subtitle">
+    <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">Numer konta</p><br>
+    </div>
+    <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">PESEL</p><br>
+    </div>
+    <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">telefon</p><br>
+    </div>
+    
+    <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">
+        {{transakcja.dane_do_rozliczen}}
+      </p><br>
+    </div>
+    <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">
+        {{transakcja.pesel}}
+      </p><br>
+    </div>
+    <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+      <p style="border-bottom: 2px solid black;">{{transakcja.telefon}}</p><br>
+    </div>
+    </h2>
+    {%else%}
+    Transakcja rozliczona (Dane do rozliczeń usunięte)
+    {%endif%}
+    <form method="POST" action="/transakcja">
+      <button class="button is-block is-info is-large is-fullwidth" style="width:20%; margin:auto;">Usun</button>
+      <input type="hidden" name="check" value="usun">
+      <input type="hidden" name="id_transakcji" value={{ transakcja.id_transakcji }}>
+      </form>
+  </div>
+{% endfor %}
+{% endif %}
+
+
+{% if choice == 'Oferty' %}
+<br>
+<h2 class="subtitle">
+  <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Oferta</p><br>
+  </div>
+  <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Liczba LarryCoin</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Cena (zł)</p><br>
+  </div>
+  <div style="width:10%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Akcja</p><br>
+  </div>
+
+  {% for oferta in oferty %}
+  <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ oferta.nazwa }}</p><br>
+  </div>
+  <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ oferta.liczba_monet }}</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ oferta.cena }}</p><br>
+  </div>
+  <form method="POST" action="/oferta">
+    <button class="button is-block is-info is-large is-fullwidth" style="width:10%; float:left;">Usun</button>
+    <input type="hidden" name="check" value="usun">
+    <input type="hidden" name="id_oferty" value={{ oferta.id_oferty }}>
+    </form>
+  {% endfor %}
+  </h2>
+  <div class="column is-4 is-offset-4" style="margin-top: 400px;">
+    <h3 class="title">Dodaj Ofertę</h3>
+    <div class="box">
+  <form method="POST" action="/oferta">
+    <div class="field">
+        <div class="control">
+            <input class="input is-large" type="text" name="nazwa" placeholder="Nazwa" autofocus="" required>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+          <p>Liczba LarryCoin</p>
+            <input class="input is-large" type="number" name="liczba_monet" placeholder="LarryCoin" min="1" value="1" required>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+          <p>Cena (zł)</p>
+            <input class="input is-large" type="number" name="cena" placeholder="Cena" min="1" value="1" required>
+        </div>
+    </div>
+    <button class="button is-block is-info is-large is-fullwidth">Dodaj</button>
+    <input type="hidden" name="check" value="dodaj">
+  </form>
+  </div>
+  </div>
+{% endif %}
+
+{% if choice == 'Druzyny' %}
+<br>
+<h2 class="subtitle">
+  <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Nazwa</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Kraj</p><br>
+  </div>
+  <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Stadion</p><br>
+  </div>
+  <div style="width:10%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Akcja</p><br>
+  </div>
+
+  {% for druzyna in druzyny %}
+  <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ druzyna.nazwa }}</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ druzyna.kraj }}</p><br>
+  </div>
+  <div style="width:40%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ druzyna.stadion }}</p><br>
+  </div>
+  <form method="POST" action="/team">
+    <button class="button is-block is-info is-large is-fullwidth" style="width:10%; float:left;">Usun</button>
+    <input type="hidden" name="check" value="usun">
+    <input type="hidden" name="id_druzyny" value={{ druzyna.id_druzyny }}>
+    </form>
+  {% endfor %}
+  </h2>
+  <div class="column is-4 is-offset-4" style="margin-top: 400px;">
+    <h3 class="title">Dodaj Drużynę</h3>
+    <div class="box">
+  <form method="POST" action="/team">
+    <div class="field">
+        <div class="control">
+            <input class="input is-large" type="text" name="nazwa" placeholder="Nazwa" autofocus="" required>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <input class="input is-large" type="text" name="kraj" placeholder="Kraj" required>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <input class="input is-large" type="text" name="stadion" placeholder="Stadion" required>
+        </div>
+    </div>
+    <button class="button is-block is-info is-large is-fullwidth">Dodaj</button>
+    <input type="hidden" name="check" value="dodaj">
+  </form>
+  </div>
+  </div>
+{% endif %}
+
+
+{% if choice == 'Ligi' %}
+<div class="column is-4 is-offset-4" style="margin-bottom: 50px;">
+  <h3 class="title">Dodaj Ligę</h3>
+  <div class="box">
+<form method="POST" action="/liga">
+  <div class="field">
+      <div class="control">
+          <input class="input is-large" type="text" name="nazwa" placeholder="Nazwa" autofocus="" required>
+          <input type="hidden" name="check" value="dodaj">
+      </div>
+  </div>
+  <button class="button is-block is-info is-large is-fullwidth">Dodaj</button>
+</form>
+</div>
+</div>
+<br>
+{% for liga in ligi %}
+<div>
+<h1 class="title" style="border-bottom:3px solid black ;">
+  <p>{{ liga.nazwa }}</p>
+  <form method="POST" action="/liga">
+    <button class="button is-block is-info is-large is-fullwidth" style="width:10%; margin:auto;">Usuń Ligę</button>
+    <input type="hidden" name="check" value="usun">
+    <input type="hidden" name="id_ligi" value={{ liga.id_ligi }}>
+    </form>
+    <br>
+</h1>
+<h2 class="subtitle">
+  <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Nazwa</p><br>
+  </div>
+  <div style="width:25%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Kraj</p><br>
+  </div>
+  <div style="width:25%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Stadion</p><br>
+  </div>
+  <div style="width:20%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Akcja</p><br>
+  </div>
+  {% for druzyna in ld %}
+  {%set a = druzyna.id_ligi | int() %}
+  {% if a == liga.id_ligi %}
+  <div style="width:30%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ druzyna.zespol }}</p><br>
+  </div>
+  <div style="width:25%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ druzyna.kraj }}</p><br>
+  </div>
+  <div style="width:25%;float:left; text-align: center;border-right: 3px solid black;">
+    <p>{{ druzyna.stadion }}</p><br>
+  </div>
+  <form method="POST" action="/ligi_druzyny">
+    <button class="button is-block is-info is-large is-fullwidth" style="width:20%; float:left;">Usun</button>
+    <input type="hidden" name="check" value="usun">
+    <input type="hidden" name="id_ligi" value={{ liga.id_ligi }}>
+    <input type="hidden" name="id_druzyny" value={{ druzyna.id_druzyny }}>
+    </form>
+  {%endif%}
+  {% endfor %}
+  <form method="POST" action="/ligi_druzyny">
+    <div class="control" style="width: 30%;">
+      <select class="input" name="id_druzyny" size="1">
+        {% for team in druzyny %}
+        <option value={{ team.id_druzyny }}>{{ team.nazwa }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="button is-block is-info is-large is-fullwidth" style="width:30%;">Dodaj do {{ liga.nazwa }}</button>
+    <input type="hidden" name="check" value="dodaj">
+    <input type="hidden" name="id_ligi" value={{ liga.id_ligi }}>
+    </form>
+  </h2>
+  </div>
+
+{% endfor %}
+{% endif %}
+
+{% endif %}
+{% endblock %}

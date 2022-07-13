@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  Zakłady
+</h1>
+<br><br>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+
+{% if not current_user.uprawnienia == 'K' %}
+<h1 class="title">
+  Dodaj zaklad
+</h1>
+<div style="width:100%; float:left; margin-bottom:200px;">
+  <br>
+  <form method="POST" action="/addbet_post">
+    <div class="field" style="width:100%;">
+      <div style="width: 14.28%;float:left;">
+        <input style="height:25pt;" type="date" name="data_meczu" placeholder="data_meczu" required>
+        <p>Data meczu</p>
+      </div>
+      <div style="width: 14.28%;float:left;">
+        <input style="height:25pt;" type="number" name="kurs_gospodarz" placeholder="kurs_gospodarz" value = 2 min = 2 required>
+        <p>Kurs Gospodarz</p>
+      </div>
+      <div style="width: 14.28%;float:left;">
+        <input style="height:25pt;" type="number" name="kurs_gosc" placeholder="kurs_gosc" value = 2 min = 2 required>
+        <p>Kurs Gosc</p>
+      </div>
+      <div style="width: 14.28%;float:left;">
+        <input style="height:25pt;" type="number" name="kurs_remis" placeholder="kurs_remis" value = 2 min = 2 required>
+        <p>Kurs Remis</p>
+      </div>  
+          <div style="width: 14.28%;float:left;">
+            <label for="gospodarz"></label>
+            <select class="input" name="gospodarz" size="1">
+              {% for druzyna in druzyny %}
+              <option value={{ druzyna.id_druzyny }}>{{ druzyna.nazwa }}</option>
+              {% endfor %}
+            </select>
+            <p>Gospodarz</p>
+          </div>
+          <div style="width: 14.28%;float:left;">
+            <label for="gosc"></label>
+            <select class="input" name="gosc" size="1">
+              {% for druzyna in druzyny %}
+              <option value={{ druzyna.id_druzyny }}>{{ druzyna.nazwa }}</option>
+              {% endfor %}
+            </select>
+            <p>Gość</p>
+          </div>
+          <div style="width: 14.28%;float:left;">
+            <label for="liga"></label>
+            <select class="input" name="liga" size="1">
+              {% for l in ligi %}
+              <option value={{ l.id_ligi }}>{{ l.nazwa }}</option>
+              {% endfor %}
+            </select>
+            <p>Liga</p>
+          </div>
+        </div>
+      <button class="button is-block is-info is-large is-fullwidth" style="width:30%; margin:auto;">Dodaj zaklad</button>
+    </form>
+  </div>
+
+{%endif%}
+
+{% for liga in ligi %}
+<h1 class="title" style="border-bottom:3px solid black ; margin-bottom:200px; margin-top:100px;">
+  <p>{{ liga.nazwa }}</p><br>
+</h1>
+{% for mecz in mecze %}
+{% if liga.nazwa == mecz.liga %}
+{% if mecz.zwyciezca != 0 and mecz.zwyciezca != 1 and mecz.zwyciezca != 2 %}
+<h2 class="subtitle">
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Gospodarz</p><br>
+    <p>{{ mecz.gospodarz }}</p>
+  </div>
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Gość</p><br>
+    <p>{{ mecz.gosc }}</p>
+  </div>
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Kurs Gospodarz</p><br>
+    <p>{{ mecz.kurs_gospodarz }}</p>
+  </div>
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Kurs Gość</p><br>
+    <p>{{ mecz.kurs_gosc }}</p>
+  </div>
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Kurs Remis</p><br>
+    <p>{{ mecz.kurs_remis }}</p>
+  </div>
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Data meczu</p><br>
+    <p>{{ mecz.data_meczu }}</p>
+  </div>
+  <div style="width:14.28%;float:left; text-align: center;border-right: 3px solid black;">
+    <p style="border-bottom: 2px solid black;">Miejsce</p><br>
+    <p>{{ mecz.kraj }} <br> {{ mecz.stadion }}</p>
+</div>
+{% if current_user.uprawnienia == 'K' %}
+  <div style="width:100%; float:left; margin-bottom:150px;">
+    <form method="POST" action="/bet_post">
+      <div class="field" style="width:100%;">
+            <div style="width: 20%;float:left;">
+              <p>Gospodarz</p>
+              <input type="radio" name="typ" value="1" checked>
+            </div>
+            <div style="width: 20%;float:left;">
+              <p>Gość</p>
+              <input type="radio" name="typ" value="2">
+            </div>
+            <div style="width: 20%;float:left;">
+              <p>Remis</p>
+              <input type="radio" name="typ" value="0">
+            </div>
+            <div style="width: 20%;float:left;">
+              <label for="vallets"></label>
+              <p>Wybierz portfel do zakładu</p>
+              <select class="input" name="vallets" size="1">
+                {% for portfel in portfele %}
+                <option value={{ portfel.id_portfela }}>{{ portfel.nazwa }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div style="width: 20%;float:left;">
+              <p>LarryCoin $</p>
+              <input style="height:25pt;" type="number" name="kwota" placeholder="Kwota" value = 0 min = 0 required> Lc $
+            </div>
+          </div>
+        <button class="button is-block is-info is-large is-fullwidth" style="width:100%;">Obstawiaj</button>
+        <input type="hidden" name="id_meczu" value={{ mecz.id_meczu }}>
+      </form>
+    </div>
+  </h2>
+      {% endif %}
+      {% if not current_user.uprawnienia == 'K' %}
+      <div style="width:100%; float:left; margin-bottom:150px;">
+    <form method="POST" action="/bet_post">
+    <input type="hidden" name="id_meczu" value={{ mecz.id_meczu }}>
+    <div style="width: 20%;float:left;">
+      <p>Gospodarz</p>
+      <input type="radio" name="win" value="1" checked>
+    </div>
+    <div style="width: 20%;float:left;">
+      <p>Gość</p>
+      <input type="radio" name="win" value="2">
+    </div>
+    <div style="width: 20%;float:left;">
+      <p>Remis</p>
+      <input type="radio" name="win" value="0">
+    </div>
+      <button class="button is-block is-info is-large is-fullwidth" style="width:40%;">Rozlicz</button>
+    </form>
+  </div>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endblock %}
