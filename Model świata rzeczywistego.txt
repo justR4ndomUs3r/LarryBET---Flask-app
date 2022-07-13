@@ -1,0 +1,25 @@
+System bukmacherski pozwalający zalogowanym klientom (użytkownikom) obstawiać mecze na podstawie kursów wyznaczanych przez bukmachera(Administrator). 
+
+I. Wymagania Funkcjonalne
+- Użytkownicy
+W systemie są użytkownicy o danych loginach, adresach email, hasłach. Użytkownicy mogą kupować doładowania wirtualnej waluty dzielącej się na oferty: 10 monet za 24.99zl, 20 monet za 39.99zl i 50 monet za 79.99zl. Wypłacić można dowolną liczbę monet za 2 zł/monetę. Użytkownik może posiadać kilka portfeli z monetami. Użytkownicy mogą obstawiać monety na wyniki meczu przed datą ich rozpoczęcia. 
+- Administratorzy
+Dane o meczu i kursy na różne wydarzenia są dodawane i modyfikowane przez Administratora. Administratorów strony może być kilku. Jest jeden główny administrator, który ma wpływ na całą baze i może dodawać konto subadminów. Subadmini mogą dodawać i usuwać mecze oraz ustanawiać kursy. 
+- Encje
+1. Klienci - ID, login, haslo(Szyfr), email
+2. Bukmacherzy - ID, login, haslo(Szyfr), email, uprawnienia
+3. Ligi - ID_ligi, nazwa
+4. Drużyny - ID_drużyny, nazwa, Kraj, adres stadionu, liga
+Drużyny mogą rozgrywać mecze tylko w obrębie tej samej ligi. Klub może należeć do wielu lig.
+5. Mecze - ID_meczu, gospodarz, gosc, kurs, data
+6. Wyniki - ID_wyniku, ID_meczu, zwyciezca(0-gospodarz, 1-gosc), 
+7. Monety - ID_oferty, nazwa, l.monet, cena
+8. Portfel - ID_portfela, właściciel, stan konta
+9. Zaklad - ID_zakladu, portfel, monety_postawione, ID_meczu, stan(aktywny, przegrana, wygrana)
+10. Kupno- ID_kupna, uzytkownik, portfel, oferta, portfel, stan konta przed, stan konta po
+11. Sprzedazy - ID_sprzedazy, uzytkownik, portfel, stan konta przed, stan konta po, oferta
+
+II. Wymagania Pozafunkcjonalne
+
+- Technologie
+Python (biblioteki np.flask), mySql, HTML i javascript
